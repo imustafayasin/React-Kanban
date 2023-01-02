@@ -7,13 +7,11 @@ app.use(express.json());
 app.use(cors())
 
 app.post('/login', function (req, res) {
-    console.clear();
     console.log(req.body);
     res.send("selam");
 })
 
 app.post('/register', function (req, res) {
-    console.clear();
     console.log(req.body);
     res.send("selam");
 })
