@@ -1,0 +1,26 @@
+{
+  "name": "react-kanban",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd client & npm run start",
+    "server": "cd server & nodemon index",
+    "start": "concurrently npm:client npm:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imustafayasin/React-Kanban.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imustafayasin/React-Kanban/issues"
+  },
+  "homepage": "https://github.com/imustafayasin/React-Kanban#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
