@@ -6,11 +6,11 @@ const request = axios.create({
 });
 
 export const login = async (userObj) => {
-    return await request.post('/login', userObj);
+    return await request.post('/user/login', userObj);
 }
 
 export const register = async (userObj) => {
-    return await request.post('/register', userObj);
+    return await request.post('/user/register', userObj);
 }
 
 

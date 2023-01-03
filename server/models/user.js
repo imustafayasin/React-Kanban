@@ -3,14 +3,13 @@ import mongoose from 'mongoose'
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
     },
     email: {
         type: String,
         required: true,
         unique: true
     },
-    email: {
+    password: {
         type: String,
         required: true,
     },
@@ -18,9 +17,25 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     profilePicture: String,
-    boardIds: [
+    boards: [
         { type: mongoose.Schema.Types.ObjectId, ref: 'Board' }
     ]
-}, { timestamps: true })
+}, { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema);
+class User {
+
+    constructor(email, password) {
+        this.email = email;
+        this.password = password;
+        this.name = email.split("@").shift()
+    }
+
+    addBoard(board) {
+        this.boards.push(board);
+        this.save();
+    }
+}
+
+
+userSchema.loadClass(User)
+export default mongoose.model('User', userSchema);
