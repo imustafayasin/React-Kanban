@@ -2,13 +2,13 @@ import express from 'express'
 import cors from 'cors'
 const app = express()
 app.use(express.json());
-
-import user from './controllers/UserController.js'
-
 app.use(cors())
 
-app.post('/user/register', user.register)
-app.post('/user/login', user.login)
+
+import user from './controllers/UserController.js'
+import requestValidator from './middlewares/requestValidator.js';
+app.post('/user/register', requestValidator, user.register)
+app.post('/user/login', requestValidator, user.login)
 
 
 

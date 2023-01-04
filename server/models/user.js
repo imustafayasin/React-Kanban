@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
+    emailConfirmed: {
+        type: Boolean
+    },
     profilePicture: String,
     boards: [
         { type: mongoose.Schema.Types.ObjectId, ref: 'Board' }
