@@ -10,9 +10,9 @@ const request = async (method, path, data) => {
             data,
             headers: { 'Content-Type': 'application/json' },
         });
-        const { success, message } = result.data;
-        if (!success) {
-            throw new Error(message);
+        const { success, error } = result.data;
+        if (!success && !!error) {
+            throw new Error(error);
         }
         return result.data;
     }
