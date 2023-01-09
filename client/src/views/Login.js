@@ -5,12 +5,13 @@ import {
     Heading, FormControl,
     Center, Input
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 
 import { login } from '../api/index'
 
 export default function Login() {
+
     const [user, setUser] = useState({
         email: '',
         password: ''

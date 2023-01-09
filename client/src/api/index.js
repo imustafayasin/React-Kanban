@@ -3,22 +3,33 @@ import axios from 'axios'
 const BASE_URL = 'http://localhost:5000'
 
 const request = async (method, path, data) => {
+
     try {
         const result = await axios({
             method,
             url: BASE_URL + path,
             data,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' }
         });
-        const { success, error } = result.data;
-        if (!success && !!error) {
-            throw new Error(error);
-        }
-        return result.data;
+        const { status, message } = result.data;
+
+        if (!!message)
+            toastMessage(status, message);
+        // return result.data;
     }
     catch (ex) {
-        alert(ex)
+        console.log(ex)
     };
+}
+
+function toastMessage(status, title) {
+    console.log({ status, title })
+    window?.toast({
+        description: title,
+        status: status,
+        duration: 9000,
+        isClosable: true
+    })
 }
 
 
