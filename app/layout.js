@@ -1,8 +1,8 @@
-import './global.css'
+import "./global.css";
 
-import { Inter } from '@next/font/google'
+import { Inter } from "@next/font/google";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   return (
@@ -14,5 +14,5 @@ export default function RootLayout({ children }) {
       <head />
       <body className={`${inter.className} h-screen`}>{children}</body>
     </html>
-  )
+  );
 }
