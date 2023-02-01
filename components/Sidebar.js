@@ -1,15 +1,16 @@
 "use client";
 import { useState } from "react";
-
+import { TableCellsIcon } from "@heroicons/react/24/solid";
 export default function Sidebar() {
-  const [mockBoards] = useState([
+  const [mockBoards, setMockBoard] = useState([
     "Example Board 1",
     "Example Board 2",
     "Example Board 3",
   ]);
+  const [showCreateNewBoardPanel, setShowCreateNewBoardPanel] = useState(false);
   const [activeBoard, setActiveBoard] = useState(1);
   return (
-    <aside className="basis-80 p-8 border-r-gray-400 border-r h-full bg-neutral-600 text-white">
+    <aside className="w-1/5 p-8 border-r-gray-400 border-r h-full bg-neutral-600 text-white">
       <div className="pb-10 text-center text-xl">Kanban app</div>
 
       <div className="Boards ">
@@ -24,13 +25,24 @@ export default function Sidebar() {
                   activeBoard == i
                     ? "bg-violet-500 shadow-lg"
                     : "bg-neutral-600"
-                } p-4 rounded-lg	  text-neutral-300`}
+                } px-4 py-2  rounded-lg	  text-neutral-300 flex  gap-5 items-center`}
               >
-                {" "}
+                <TableCellsIcon className="w-[18px] " />
                 {b}
               </button>
             );
           })}
+          <div>
+            <button
+              onClick={() => {
+                setMockBoard([...mockBoards, "test"]);
+              }}
+              className="px-4 py-2 flex w-full  gap-5 items-center rounded-lg bg-violet-500 shadow-lg	  text-neutral-300"
+            >
+              <TableCellsIcon className="w-[18px] " />
+              <span>+Create a new board</span>
+            </button>
+          </div>
         </nav>
       </div>
     </aside>
