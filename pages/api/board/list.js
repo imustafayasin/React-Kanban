@@ -1,11 +1,9 @@
-import GetDatabaseCollection from "@/lib/mongodb";
+import { findAllAsync } from "repositories/boardRepository.js";
 
 export default async function handler(req, res) {
-  let boards = await GetDatabaseCollection("boards");
-  switch (req.method) {
-    case "GET":
-      const allPosts = await boards.find({}).toArray();
-      res.json({ status: 200, data: allPosts });
-      break;
+  console.log(findAllAsync);
+  if (req.method == "GET") {
+    const allPosts = await findAllAsync();
+    res.json({ status: 200, data: allPosts });
   }
 }
