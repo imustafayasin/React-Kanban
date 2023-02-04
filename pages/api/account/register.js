@@ -1,23 +1,21 @@
 import { register } from "repositories/accountRepository";
-import sendEmail from "external/sendgrid";
+import sendVerificationEmail from "services/email/sendVerificationEmail";
 
 export default async function handler(req, res) {
   try {
     const response = await register(req.body.email);
-    if (response.success) {
-      await sendEmail(
+
+    if (response.success !== false) {
+      const { success: verificationEmailSuccess } = await sendVerificationEmail(
         response.user.email,
-        "Kanban APP Register",
-        '<a href="">Login your account</a>'
-      ).then((emailResponse) => {
-        console.log(emailResponse);
-        if (emailResponse === false) {
-          res.send({
-            success: false,
-            message: "An error occurred while register",
-          });
-        }
-        res.send(response);
+        response.user.id
+      );
+
+      res.send({
+        success: verificationEmailSuccess,
+        message: verificationEmailSuccess
+          ? "Success! We sent login url to your email!"
+          : "An error occurred while sending email",
       });
     } else {
       res.send(response);

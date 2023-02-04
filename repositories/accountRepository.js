@@ -5,6 +5,7 @@ const register = async function (email) {
     const userCollection = await GetDatabaseCollection("users");
     const currentUser = await userCollection.findOne({ email });
 
+    //todo: refactor later
     if (!!currentUser)
       return {
         success: false,
@@ -15,16 +16,41 @@ const register = async function (email) {
       email: email,
       mailConfirmed: false,
     };
-    const registeredUser = await userCollection.insertOne(userObject);
-    return {
-      success: true,
-      user: { email: registeredUser.email },
-      message: "Success! We sent login url to your email!",
-    };
+    await userCollection.insertOne(userObject);
+    return { user: { email: userObject.email, id: userObject._id.toString() } };
   } catch (err) {
-    console.log(err);
-    return err;
+    //todo install logger
+    return {
+      success: false,
+      message: `An error occurred while registration`,
+    };
   }
 };
 
-export { register };
+const verification = async function (jwtToken) {
+  try {
+    const jwt = await import("jsonwebtoken");
+    const ObjectId = (await import("mongodb")).ObjectId;
+
+    if (!jwtToken || jwtToken.length < 0) {
+      return { success: false, message: "Token not provided" };
+    }
+
+    let userId = jwt.verify(jwtToken.toString(), process.env.JWT_SECRET);
+    const userCollection = await GetDatabaseCollection("users");
+
+    // todo: if user account already verified send a a message and don't update
+    await userCollection.findOneAndUpdate(
+      { _id: new ObjectId(userId) },
+      {
+        $set: { mailConfirmed: true },
+      }
+    );
+
+    return { success: true };
+  } catch (error) {
+    return { success: false };
+  }
+};
+
+export { register, verification };

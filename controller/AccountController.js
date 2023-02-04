@@ -4,4 +4,8 @@ const login = async function (email) {
   return await request("/api/account/register", "POST", { email });
 };
 
-export { login };
+const verification = async function (token) {
+  return await request("/api/account/verification", "POST", { token });
+};
+
+export { login, verification };

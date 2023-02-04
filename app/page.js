@@ -2,7 +2,6 @@ import Sidebar from "../components/Sidebar";
 import ContentHeader from "../components/ContentHeader";
 
 export default function Home() {
-  console.log(Sidebar);
   let style = {
     content: {
       height: "calc(100% - 96px)",
