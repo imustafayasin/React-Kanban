@@ -38,10 +38,12 @@ const verification = async function (jwtToken) {
 
     let userId = jwt.verify(jwtToken.toString(), process.env.JWT_SECRET);
     const userCollection = await GetDatabaseCollection("users");
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    if (!user) return { success: false };
 
     // todo: if user account already verified send a a message and don't update
     await userCollection.findOneAndUpdate(
-      { _id: new ObjectId(userId) },
+      { _id: user._id },
       {
         $set: { mailConfirmed: true },
       }

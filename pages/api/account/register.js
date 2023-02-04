@@ -4,7 +4,6 @@ import sendVerificationEmail from "services/email/sendVerificationEmail";
 export default async function handler(req, res) {
   try {
     const response = await register(req.body.email);
-
     if (response.success !== false) {
       const { success: verificationEmailSuccess } = await sendVerificationEmail(
         response.user.email,
