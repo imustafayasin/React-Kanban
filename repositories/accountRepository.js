@@ -3,21 +3,19 @@ import GetDatabaseCollection from "lib/mongodb";
 const register = async function (email) {
   try {
     const userCollection = await GetDatabaseCollection("users");
-    const currentUser = await userCollection.findOne({ email });
+    let currentUser = await userCollection.findOne({ email });
 
     //todo: refactor later
-    if (!!currentUser)
-      return {
-        success: false,
-        message: `${email} already used by a another user. `,
+    if (!currentUser) {
+      const userObject = {
+        email: email,
+        mailConfirmed: false,
       };
+      await userCollection.insertOne(userObject);
+      currentUser = userObject;
+    }
 
-    const userObject = {
-      email: email,
-      mailConfirmed: false,
-    };
-    await userCollection.insertOne(userObject);
-    return { user: { email: userObject.email, id: userObject._id.toString() } };
+    return { user: { email: currentUser.email, id: currentUser._id.toString() } };
   } catch (err) {
     //todo install logger
     return {
@@ -36,19 +34,26 @@ const verification = async function (jwtToken) {
       return { success: false, message: "Token not provided" };
     }
 
-    let userId = jwt.verify(jwtToken.toString(), process.env.JWT_SECRET);
+    const { userId } = jwt.verify(jwtToken.toString(), process.env.JWT_SECRET);
+    const userTokensCollection = await GetDatabaseCollection("userTokens");
+    const { token } = await userTokensCollection.findOne({ _id: new ObjectId(userId) });
+
     const userCollection = await GetDatabaseCollection("users");
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (!user) return { success: false };
+    if (token != jwtToken) {
+      throw new Error("Tokens not matched.");
+    }
 
-    // todo: if user account already verified send a a message and don't update
-    await userCollection.findOneAndUpdate(
-      { _id: user._id },
-      {
-        $set: { mailConfirmed: true },
-      }
-    );
-
+    if (user.mailConfirmed != true) {
+      // todo: if user account already verified send a a message and don't update
+      await userCollection.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $set: { mailConfirmed: true },
+        }
+      );
+    }
     return { success: true };
   } catch (error) {
     return { success: false };
