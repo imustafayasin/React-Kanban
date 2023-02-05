@@ -1,5 +1,14 @@
 import GetDatabaseCollection from "lib/mongodb";
 
+const getUserWithJWT = async function (JWT) {
+  const userCollection = await GetDatabaseCollection("users");
+  const jwt = await import("jsonwebtoken");
+  const ObjectId = (await import("mongodb")).ObjectId;
+
+  const { userId } = jwt.verify(JWT.toString(), process.env.JWT_SECRET);
+  return await userCollection.findOne({ _id: new ObjectId(userId) });
+};
+
 const register = async function (email) {
   try {
     const userCollection = await GetDatabaseCollection("users");
@@ -60,4 +69,4 @@ const verification = async function (jwtToken) {
   }
 };
 
-export { register, verification };
+export { register, verification, getUserWithJWT };

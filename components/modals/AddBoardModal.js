@@ -1,15 +1,20 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
+import { create } from "controller/boardController";
 
-export default function AddBoardModal({ show, onHide }) {
+export default function AddBoardModal({ show, onHide, dispatchGet }) {
   const [board, setBoard] = useState({});
 
   const columnNameInputRef = useRef(null);
   function handleSetBoard(val) {
     setBoard({ ...board, ...val });
   }
-  function handleCreateBoard() {}
+  async function handleCreateBoard() {
+    await create(board);
+    onHide();
+    dispatchGet();
+  }
 
   return (
     <>
@@ -63,7 +68,7 @@ export default function AddBoardModal({ show, onHide }) {
                     });
                     columnNameInputRef.current.value = "";
                   }}
-                  className="w-28 rounded-l-none shadow text-white rounded-r-lg rounded-b-lg rounded-t-lg bg-[#7F56D9] h-full py-2.5  px-3.5 "
+                  className="w-28 rounded-l-none border-2 border-[#7F56D9] text-white rounded-lg  bg-[#7F56D9] h-full py-2.5  px-3.5 "
                 >
                   Add
                 </button>
@@ -95,7 +100,10 @@ export default function AddBoardModal({ show, onHide }) {
               <button className="flex-grow flex-grow py-2.5 px-5 shadow rounded-lg border  text-base">
                 Cancel
               </button>
-              <button className="flex-grow py-2.5 px-5 shadow rounded-lg border border-[#7F56D9] bg-[#7F56D9] text-white text-base">
+              <button
+                onClick={handleCreateBoard}
+                className="flex-grow py-2.5 px-5 shadow rounded-lg border border-[#7F56D9] bg-[#7F56D9] text-white text-base"
+              >
                 Done
               </button>
             </div>

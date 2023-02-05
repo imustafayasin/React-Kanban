@@ -8,5 +8,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: "/((?!api|_next|static|login|register|public|favicon.ico).*)",
+  matcher: "/((?!api/account|_next|static|login|register|public|favicon.ico).*)",
 };
