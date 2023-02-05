@@ -10,7 +10,7 @@ export default function Home() {
   };
 
   return (
-    <div className="mx-auto flex flex-row h-full overflow-hidden	">
+    <div className="mx-auto flex flex-row h-full overflow-hidden w-full	relative">
       <Sidebar />
       <main className="w-full">
         <ContentHeader />

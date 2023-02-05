@@ -7,6 +7,7 @@ export default async function sendVerificationEmail(to, userId) {
     const token = jwt.sign({ userId, uniqeSalt: Date.now() }, process.env.JWT_SECRET);
     //todo refactor here
     await saveUserToken(userId, token);
+
     let emailResponse = await sendEmail(
       to,
       "Login your KANBAN Account",
