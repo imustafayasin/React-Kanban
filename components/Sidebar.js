@@ -8,11 +8,17 @@ import { useEffect, useState } from "react";
 export default function Sidebar({ setColumns }) {
   const [createModalIsOpen, setCreateModalState] = useState(false);
   const [boards, setBoards] = useState([]);
+  const [activeBoard, setActiveBoard] = useState(0);
+
   async function handleBoards() {
     setBoards((await board.findAll()).data);
   }
   async function getBoardColumns(id) {
-    setColumns(await column.findAll(id));
+    if (activeBoard == id) return;
+    setTimeout(async () => {
+      setColumns(await column.findAll(id));
+    });
+    setActiveBoard(id);
   }
   useEffect(() => {
     handleBoards();
@@ -45,14 +51,14 @@ export default function Sidebar({ setColumns }) {
           <label className="text-sm pb-2 border-b block text-xs w-full">
             ALL BOARDS (9)
           </label>
-          {boards.length && (
+          {!!boards.length && (
             <nav className="flex flex-col mt-4 gap-4">
               {boards?.map((b, i) => {
                 return (
                   <button
                     key={b._id}
                     onClick={() => getBoardColumns(b._id)}
-                    className={` px-3 py-2  rounded-md   text-gray-700 flex  items-center`}
+                    className={` select-none px-3 py-2  rounded-md  hover:bg-hover-gray-100  text-gray-700 flex  items-center`}
                   >
                     {/* <TableCellsIcon className="w-6 h-6 text-gray-500 mr-3" /> */}
                     {b.name}
@@ -64,7 +70,7 @@ export default function Sidebar({ setColumns }) {
                   onClick={() => {
                     setCreateModalState(true);
                   }}
-                  className="px-4 py-2 flex w-full items-center rounded-lg border  shadow-sm"
+                  className="px-4 py-2 select-none flex w-full items-center rounded-lg border  shadow-sm"
                 >
                   <PlusIcon className="w-6 h-6 text-gray-500 mr-3" />
                   <span className="text-black">Create a new board</span>

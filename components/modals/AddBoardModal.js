@@ -97,7 +97,12 @@ export default function AddBoardModal({ show, onHide, dispatchGet }) {
               })}
             </div>
             <div className="buttons flex mt-6 gap-4">
-              <button className="flex-grow flex-grow py-2.5 px-5 shadow rounded-lg border  text-base">
+              <button
+                onClick={(e) => {
+                  onHide(false);
+                }}
+                className="flex-grow py-2.5 px-5 shadow rounded-lg border  text-base"
+              >
                 Cancel
               </button>
               <button
