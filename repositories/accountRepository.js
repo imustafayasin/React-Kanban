@@ -1,27 +1,24 @@
-import GetDatabaseCollection from "lib/mongodb";
+import "lib/mongodb";
+import { ObjectId } from "mongodb";
+import Users from "../models/userModel.js";
+import UserTokens from "../models/userTokenModel";
 
 const getUserWithJWT = async function (JWT) {
-  const userCollection = await GetDatabaseCollection("users");
   const jwt = await import("jsonwebtoken");
-  const ObjectId = (await import("mongodb")).ObjectId;
-
   const { userId } = jwt.verify(JWT.toString(), process.env.JWT_SECRET);
-  return await userCollection.findOne({ _id: new ObjectId(userId) });
+  return await Users.findById(userId);
 };
 
 const register = async function (email) {
   try {
-    const userCollection = await GetDatabaseCollection("users");
-    let currentUser = await userCollection.findOne({ email });
+    let currentUser = await Users.findOne({ email: email });
 
     //todo: refactor later
     if (!currentUser) {
-      const userObject = {
+      currentUser = await Users.create({
         email: email,
-        mailConfirmed: false,
-      };
-      await userCollection.insertOne(userObject);
-      currentUser = userObject;
+      });
+      console.log(currentUser, "test");
     }
 
     return { user: { email: currentUser.email, id: currentUser._id.toString() } };
@@ -37,18 +34,17 @@ const register = async function (email) {
 const verification = async function (jwtToken) {
   try {
     const jwt = await import("jsonwebtoken");
-    const ObjectId = (await import("mongodb")).ObjectId;
 
     if (!jwtToken || jwtToken.length < 0) {
       return { success: false, message: "Token not provided" };
     }
 
     const { userId } = jwt.verify(jwtToken.toString(), process.env.JWT_SECRET);
-    const userTokensCollection = await GetDatabaseCollection("userTokens");
-    const { token } = await userTokensCollection.findOne({ _id: new ObjectId(userId) });
 
-    const userCollection = await GetDatabaseCollection("users");
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    const { token } = await UserTokens.findOne({ _id: new ObjectId(userId) });
+
+    const user = await Users.findById(userId);
+
     if (!user) return { success: false };
     if (token != jwtToken) {
       throw new Error("Tokens not matched.");
@@ -56,12 +52,7 @@ const verification = async function (jwtToken) {
 
     if (user.mailConfirmed != true) {
       // todo: if user account already verified send a a message and don't update
-      await userCollection.findOneAndUpdate(
-        { _id: user._id },
-        {
-          $set: { mailConfirmed: true },
-        }
-      );
+      await Users.findByIdAndUpdate(user._id, { emailConfirmed: true });
     }
     return { success: true };
   } catch (error) {

@@ -48,11 +48,9 @@ export default function Sidebar({ setColumns }) {
         </div>
 
         <div className="Boards ">
-          <label className="text-sm pb-2 border-b block text-xs w-full">
-            ALL BOARDS (9)
-          </label>
+          <label className="text-sm pb-2 border-b block  w-full">ALL BOARDS (9)</label>
           {!!boards.length && (
-            <nav className="flex flex-col mt-4 gap-4">
+            <nav className="flex flex-col mt-4 gap-4 overflow-y-auto max-h-[75vh]">
               {boards?.map((b, i) => {
                 return (
                   <button
@@ -65,19 +63,19 @@ export default function Sidebar({ setColumns }) {
                   </button>
                 );
               })}
-              <div>
-                <button
-                  onClick={() => {
-                    setCreateModalState(true);
-                  }}
-                  className="px-4 py-2 select-none flex w-full items-center rounded-lg border  shadow-sm"
-                >
-                  <PlusIcon className="w-6 h-6 text-gray-500 mr-3" />
-                  <span className="text-black">Create a new board</span>
-                </button>
-              </div>
             </nav>
           )}
+          <div>
+            <button
+              onClick={() => {
+                setCreateModalState(true);
+              }}
+              className="px-4 mt-4 py-2 select-none flex w-full items-center rounded-lg border  shadow-sm"
+            >
+              <PlusIcon className="w-6 h-6 text-gray-500 mr-3" />
+              <span className="text-black">Create a new board</span>
+            </button>
+          </div>
         </div>
       </aside>
     </>

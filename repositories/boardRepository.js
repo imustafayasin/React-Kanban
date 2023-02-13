@@ -1,23 +1,23 @@
-import GetDatabaseCollection from "lib/mongodb";
+import "lib/mongodb";
+import Boards from "../models/boardModel";
+import Columns from "../models/columnModel";
+
 import { getUserWithJWT } from "./accountRepository";
 let findAllAsync = async function (usertoken) {
-  const boardsCollection = await GetDatabaseCollection("boards");
   const user = await getUserWithJWT(usertoken);
-  const boards = await boardsCollection.find({ userId: user._id }).toArray();
-  return boards;
+  return await Boards.find({ userId: user._id });
 };
 
 let create = async function (board) {
-  const boardsCollection = await GetDatabaseCollection("boards");
   const user = await getUserWithJWT(board.userToken);
-  let createdBoard = await boardsCollection.insertOne({
+  let createdBoard = await Boards.create({
     userId: user._id,
     name: board.name,
   });
+  console.log({ createdBoard });
 
-  const columnsCollection = await GetDatabaseCollection("columns");
   for (const column of board.columns) {
-    await columnsCollection.insertOne({ boardId: createdBoard.insertedId, name: column });
+    await Columns.create({ boardId: createdBoard._id, name: column });
   }
 };
 

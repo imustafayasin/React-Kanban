@@ -1,21 +1,22 @@
-import {
-  XCircleIcon,
-  ClipboardDocumentListIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
-import { create } from "controller/boardController";
+import { XCircleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { create } from "controller/taskController";
 
-export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
-  const [column, setColumn] = useState({ subTasks: [""] });
-  function handleSetBoard(val) {
-    setColumn({ ...column, ...val });
+export default function AddTaskModal({ show, onHide, columns }) {
+  const [task, setTask] = useState();
+  function handleSetTask(val) {
+    setTask({ ...task, ...val });
   }
   async function handleCreateBoard() {
-    await create(board);
+    await create(task);
     onHide();
-    dispatchGet();
   }
+  useEffect(() => {
+    setTask({
+      subTasks: [{ name: "" }],
+      columnId: columns[0]?._id,
+    });
+  }, [columns]);
 
   return (
     <>
@@ -24,7 +25,7 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
           !show ? "invisible" : ""
         } modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 "`}
       >
-        <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[400px]	p-4">
+        <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[400px]">
           <div className="head mb-5">
             <div className="icon border mb-4 w-12 h-12 grid place-items-center rounded-[10px] shadow">
               <ClipboardDocumentListIcon className="w-6 h-6" />
@@ -39,7 +40,7 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
               <input
                 type="text"
                 onInput={(e) => {
-                  handleSetBoard({ name: e.target.value });
+                  handleSetTask({ name: e.target.value });
                 }}
                 className="py-2.5  px-3.5 rounded-lg border w-full focus-visible:outline-0"
                 placeholder="Enter task name"
@@ -50,16 +51,16 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
                 Add subtasks
               </label>
               <div className="max-h-40 overflow-y-auto">
-                {column?.subTasks?.map((subTask, i) => {
+                {task?.subTasks?.map((subTask, i) => {
                   return (
                     <div key={i} className="flex items-center gap-2 mb-2 pr-3">
                       <input
                         type="text"
                         onInput={(e) => {
-                          let columns = column.subTasks;
-                          columns[i] = e.target.value;
-                          handleSetBoard({
-                            subTasks: columns,
+                          let tasksObj = task.subTasks;
+                          tasksObj[i] = { name: e.target.value };
+                          handleSetTask({
+                            subTasks: tasksObj,
                           });
                         }}
                         className="w-full border  rounded-lg focus-visible:outline-0 py-2.5  px-3.5 "
@@ -68,8 +69,8 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
                       {i != 0 && (
                         <XCircleIcon
                           onClick={() => {
-                            handleSetBoard({
-                              subTasks: column?.subTasks?.filter((b, ind) => i != ind),
+                            handleSetTask({
+                              subTasks: task?.subTasks?.filter((b, ind) => i != ind),
                             });
                           }}
                           className="w-5 cursor-pointer  h-5"
@@ -81,8 +82,8 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
               </div>
               <button
                 onClick={() => {
-                  handleSetBoard({
-                    subTasks: [...(column?.subTasks ?? []), ""],
+                  handleSetTask({
+                    subTasks: [...(task?.subTasks ?? []), ""],
                   });
                 }}
                 className="w-48 ml-auto block mt-2 border-2 border-[#7F56D9] text-white rounded-lg  bg-[#7F56D9] h-full py-2.5  px-3.5 "
@@ -98,12 +99,18 @@ export default function AddTaskModal({ show, onHide, dispatchGet, columns }) {
 
               <select
                 type="text"
-                onInput={(e) => {}}
+                onChange={(e) => {
+                  handleSetTask({
+                    columnId: e.target.value,
+                  });
+                }}
                 className="w-full border  rounded-lg focus-visible:outline-0 py-2.5  px-3.5 "
                 placeholder="Enter subtask name"
               >
-                {columns.map((c) => (
-                  <option value={c._id}>{c.name}</option>
+                {columns.map((c, i) => (
+                  <option key={i} value={c._id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>

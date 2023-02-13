@@ -1,10 +1,8 @@
-import GetDatabaseCollection from "lib/mongodb";
+import "lib/mongodb";
+import { ObjectId } from "mongodb";
+import Columns from "../models/columnModel";
+
 let findAllAsync = async function (boardId) {
-  const ObjectId = (await import("mongodb")).ObjectId;
-  const columnsCollection = await GetDatabaseCollection("columns");
-  const columns = await columnsCollection
-    .find({ boardId: new ObjectId(boardId) })
-    .toArray();
-  return columns;
+  return await Columns.find({ boardId: new ObjectId(boardId) });
 };
 export { findAllAsync };

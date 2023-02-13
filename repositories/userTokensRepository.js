@@ -1,12 +1,11 @@
-import GetDatabaseCollection from "lib/mongodb";
+import "lib/mongodb";
+import { ObjectId } from "mongodb";
+import UserTokens from "../models/userTokenModel";
 export default async function saveUserToken(userId, token) {
   try {
-    const userTokensTable = await GetDatabaseCollection("userTokens");
-    const ObjectId = (await import("mongodb")).ObjectId;
-
-    await userTokensTable.findOneAndUpdate(
+    await UserTokens.findOneAndUpdate(
       { _id: new ObjectId(userId) },
-      { $set: { token: token } },
+      { token: token },
       { upsert: true }
     );
 
