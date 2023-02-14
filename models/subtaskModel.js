@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 class SubTask {
-  constructor(taskId, name) {
+  constructor(taskId, name, columnId) {
     this.taskId = taskId;
     this.name = name;
+    this.columnId = columnId;
   }
 }
 
@@ -14,6 +15,10 @@ var subtaskSchema = new mongoose.Schema({
   taskId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tasks",
+  },
+  columnId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Columns",
   },
 });
 

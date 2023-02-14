@@ -10,14 +10,15 @@ let findAllAsync = async function (usertoken) {
 
 let create = async function (board) {
   const user = await getUserWithJWT(board.userToken);
-  let createdBoard = await Boards.create({
+  let createdBoard = await new Boards({
     userId: user._id,
     name: board.name,
   });
-  console.log({ createdBoard });
+  createdBoard.save();
 
   for (const column of board.columns) {
-    await Columns.create({ boardId: createdBoard._id, name: column });
+    let columnClass = await new Columns({ boardId: createdBoard._id, name: column });
+    columnClass.save();
   }
 };
 

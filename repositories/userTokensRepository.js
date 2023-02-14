@@ -1,6 +1,6 @@
 import "lib/mongodb";
 import { ObjectId } from "mongodb";
-import UserTokens from "../models/userTokenModel";
+import UserTokens from "../models/userTokensModel";
 export default async function saveUserToken(userId, token) {
   try {
     await UserTokens.findOneAndUpdate(

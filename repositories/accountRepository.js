@@ -1,7 +1,7 @@
 import "lib/mongodb";
 import { ObjectId } from "mongodb";
 import Users from "../models/userModel.js";
-import UserTokens from "../models/userTokenModel";
+import UserTokens from "../models/userTokensModel";
 
 const getUserWithJWT = async function (JWT) {
   const jwt = await import("jsonwebtoken");
@@ -18,7 +18,6 @@ const register = async function (email) {
       currentUser = await Users.create({
         email: email,
       });
-      console.log(currentUser, "test");
     }
 
     return { user: { email: currentUser.email, id: currentUser._id.toString() } };
