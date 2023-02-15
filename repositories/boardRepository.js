@@ -10,16 +10,17 @@ let findAllAsync = async function (usertoken) {
 
 let create = async function (board) {
   const user = await getUserWithJWT(board.userToken);
-  let createdBoard = await new Boards({
+  let createdBoard = await Boards.create({
     userId: user._id,
     name: board.name,
   });
-  createdBoard.save();
 
-  for (const column of board.columns) {
-    let columnClass = await new Columns({ boardId: createdBoard._id, name: column });
-    columnClass.save();
-  }
+  await Columns.insertMany(
+    board.columns.map((columnName) => ({
+      boardId: createdBoard._id,
+      name: columnName,
+    }))
+  );
 };
 
 export { findAllAsync, create };

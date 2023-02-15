@@ -6,7 +6,10 @@ export default async function handler(req, res) {
     if (success === true) {
       res.setHeader(
         "Set-Cookie",
-        serialize("Identity", String(req.body.token), { httpOnly: true, path: "/" })
+        serialize("Identity", String(req.body.token), {
+          httpOnly: true,
+          path: "/",
+        })
       );
     }
     res.send({ success });

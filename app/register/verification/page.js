@@ -37,7 +37,7 @@ export default function Verification({ searchParams }) {
 
       if (verificationResult.success === true) {
         setTimeout(() => {
-          router.push("/");
+          router.replace("/");
         }, 4000);
       }
     })();

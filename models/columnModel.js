@@ -6,9 +6,9 @@ class Column {
     this.boardId = boardId;
     this.name = name;
   }
-  addTask(task) {
+  async addTask(task) {
     this.tasks.push(task);
-    this.save();
+    await this.save();
   }
 }
 

@@ -25,7 +25,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
           !show ? "invisible" : ""
         } modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 "`}
       >
-        <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[400px]">
+        <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[500px]">
           <div className="head mb-5">
             <div className="icon border mb-4 w-12 h-12 grid place-items-center rounded-[10px] shadow">
               <ClipboardDocumentListIcon className="w-6 h-6" />
@@ -35,7 +35,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
           <div className="modal-content">
             <div className="input-group pb-3">
               <label className="text-sm pb-[6px] font-medium text-gray-700 block">
-                Task name
+                Title
               </label>
               <input
                 type="text"
@@ -46,6 +46,20 @@ export default function AddTaskModal({ show, onHide, columns }) {
                 placeholder="Enter task name"
               />
             </div>
+            <div className="input-group pb-3">
+              <label className="text-sm pb-[6px] font-medium text-gray-700 block">
+                Description
+              </label>
+              <textarea
+                type="text"
+                onInput={(e) => {
+                  handleSetTask({ description: e.target.value });
+                }}
+                rows="2"
+                className="py-2.5  px-3.5 rounded-lg border w-full focus-visible:outline-0"
+                placeholder="Enter task detail"
+              ></textarea>
+            </div>
             <div className="input-group mb-3">
               <label className="text-sm pb-[6px] font-medium text-gray-700 block">
                 Add subtasks
@@ -53,7 +67,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
               <div className="max-h-40 overflow-y-auto">
                 {task?.subTasks?.map((subTask, i) => {
                   return (
-                    <div key={i} className="flex items-center gap-2 mb-2 pr-3">
+                    <div key={i} className="flex items-center gap-2 mb-2">
                       <input
                         type="text"
                         onInput={(e) => {
