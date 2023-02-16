@@ -1,30 +1,29 @@
 import { XCircleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { create } from "controller/taskController";
+import { createOrUpdate } from "controller/taskController";
 
-export default function AddTaskModal({ show, onHide, columns }) {
+export default function AddTaskModal({ hide, columns, selectedTask }) {
   const [task, setTask] = useState();
   function handleSetTask(val) {
     setTask({ ...task, ...val });
   }
-  async function handleCreateBoard() {
-    await create(task);
-    onHide();
+  async function handleCreateOrUpdateTask() {
+    await createOrUpdate(task);
+    hide();
   }
   useEffect(() => {
     setTask({
       subTasks: [{ name: "" }],
       columnId: columns[0]?._id,
     });
+    if (selectedTask._id) {
+      setTask({ columnId: columns[0]?._id, ...selectedTask });
+    }
   }, [columns]);
 
   return (
     <>
-      <div
-        className={`${
-          !show ? "invisible" : ""
-        } modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 "`}
-      >
+      <div className="modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 ">
         <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[500px]">
           <div className="head mb-5">
             <div className="icon border mb-4 w-12 h-12 grid place-items-center rounded-[10px] shadow">
@@ -32,6 +31,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
             </div>
             <h2 className="text-lg font-semibold ">Create a new task</h2>
           </div>
+          {JSON.stringify(task)}
           <div className="modal-content">
             <div className="input-group pb-3">
               <label className="text-sm pb-[6px] font-medium text-gray-700 block">
@@ -39,6 +39,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
               </label>
               <input
                 type="text"
+                value={task?.name}
                 onInput={(e) => {
                   handleSetTask({ name: e.target.value });
                 }}
@@ -52,6 +53,7 @@ export default function AddTaskModal({ show, onHide, columns }) {
               </label>
               <textarea
                 type="text"
+                value={task?.description}
                 onInput={(e) => {
                   handleSetTask({ description: e.target.value });
                 }}
@@ -70,9 +72,10 @@ export default function AddTaskModal({ show, onHide, columns }) {
                     <div key={i} className="flex items-center gap-2 mb-2">
                       <input
                         type="text"
+                        value={subTask?.name}
                         onInput={(e) => {
                           let tasksObj = task.subTasks;
-                          tasksObj[i] = { name: e.target.value };
+                          tasksObj[i] = { ...tasksObj[i], name: e.target.value };
                           handleSetTask({
                             subTasks: tasksObj,
                           });
@@ -132,14 +135,14 @@ export default function AddTaskModal({ show, onHide, columns }) {
             <div className="buttons flex mt-6 gap-4">
               <button
                 onClick={(e) => {
-                  onHide(false);
+                  hide();
                 }}
                 className="flex-grow  py-2.5 px-5 shadow rounded-lg border  text-base"
               >
                 Cancel
               </button>
               <button
-                onClick={handleCreateBoard}
+                onClick={handleCreateOrUpdateTask}
                 className="flex-grow py-2.5 px-5 shadow rounded-lg border border-[#7F56D9] bg-[#7F56D9] text-white text-base"
               >
                 Done
@@ -149,11 +152,9 @@ export default function AddTaskModal({ show, onHide, columns }) {
         </div>
         <div
           onClick={(e) => {
-            onHide(false);
+            hide();
           }}
-          className={`${
-            !show ? "invisible" : ""
-          } z-10  backdrop-blur-[1px]  absolute h-full bg-black/25 w-full`}
+          className=" z-10  backdrop-blur-[1px]  absolute h-full bg-black/25 w-full"
         ></div>
       </div>
     </>

@@ -7,8 +7,8 @@ class Task {
     this.name = name;
     this.description = description;
   }
-  addSubTask(subtask) {
-    this.subTasks.push(subtask);
+  setSubTasks(subtasks) {
+    this.subTasks = subtasks;
     this.save();
   }
 }

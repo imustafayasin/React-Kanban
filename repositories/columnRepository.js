@@ -2,6 +2,7 @@ import "lib/mongodb";
 import { ObjectId } from "mongodb";
 import Columns from "../models/columnModel";
 import "../models/taskModel";
+import "../models/subtaskModel";
 
 let findAllAsync = async function (boardId) {
   return await Columns.find({ boardId: new ObjectId(boardId) }).populate({

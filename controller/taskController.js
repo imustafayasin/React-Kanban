@@ -1,7 +1,8 @@
 import request from "../lib/axios";
 
-const create = async function ({ name, subTasks, columnId, description }) {
-  return await request("/api/task/create", "POST", {
+const createOrUpdate = async function ({ _id, name, subTasks, columnId, description }) {
+  return await request("/api/task/createOrUpdate", "POST", {
+    _id,
     name,
     subTasks,
     columnId,
@@ -9,4 +10,8 @@ const create = async function ({ name, subTasks, columnId, description }) {
   });
 };
 
-export { create };
+const getById = async function (taskId) {
+  return await request("/api/task/get", "POST", { taskId });
+};
+
+export { createOrUpdate, getById };
