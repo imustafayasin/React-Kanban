@@ -7,6 +7,7 @@ export default function AddTaskModal({ hide, columns, selectedTask }) {
   function handleSetTask(val) {
     setTask({ ...task, ...val });
   }
+
   async function handleCreateOrUpdateTask() {
     await createOrUpdate(task);
     hide();
@@ -19,7 +20,7 @@ export default function AddTaskModal({ hide, columns, selectedTask }) {
     if (selectedTask._id) {
       setTask({ columnId: columns[0]?._id, ...selectedTask });
     }
-  }, [columns]);
+  }, []);
 
   return (
     <>
@@ -29,9 +30,10 @@ export default function AddTaskModal({ hide, columns, selectedTask }) {
             <div className="icon border mb-4 w-12 h-12 grid place-items-center rounded-[10px] shadow">
               <ClipboardDocumentListIcon className="w-6 h-6" />
             </div>
-            <h2 className="text-lg font-semibold ">Create a new task</h2>
+            <h2 className="text-lg font-semibold ">
+              {selectedTask._id ? "Update" : "Create"} a new task
+            </h2>
           </div>
-          {JSON.stringify(task)}
           <div className="modal-content">
             <div className="input-group pb-3">
               <label className="text-sm pb-[6px] font-medium text-gray-700 block">
@@ -134,9 +136,7 @@ export default function AddTaskModal({ hide, columns, selectedTask }) {
 
             <div className="buttons flex mt-6 gap-4">
               <button
-                onClick={(e) => {
-                  hide();
-                }}
+                onClick={hide}
                 className="flex-grow  py-2.5 px-5 shadow rounded-lg border  text-base"
               >
                 Cancel
@@ -151,9 +151,7 @@ export default function AddTaskModal({ hide, columns, selectedTask }) {
           </div>
         </div>
         <div
-          onClick={(e) => {
-            hide();
-          }}
+          onClick={hide}
           className=" z-10  backdrop-blur-[1px]  absolute h-full bg-black/25 w-full"
         ></div>
       </div>

@@ -7,6 +7,7 @@ class Column {
     this.name = name;
   }
   async addTask(task) {
+    if (this.tasks.includes(task._id)) return;
     this.tasks.push(task);
     await this.save();
   }

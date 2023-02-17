@@ -16,6 +16,10 @@ var subtaskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tasks",
   },
+  done: {
+    type: Boolean,
+    default: false,
+  },
   columnId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Columns",

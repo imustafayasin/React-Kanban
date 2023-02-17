@@ -26,7 +26,7 @@ export default function Home() {
     <>
       {!!createModalIsOpen && (
         <AddTaskModal
-          hide={() => setCreateModalState(false)}
+          hide={() => (setCreateModalState(false), setselectedTask({}))}
           columns={columns}
           selectedTask={selectedTask}
         />

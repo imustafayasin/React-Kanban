@@ -7,8 +7,9 @@ class Task {
     this.name = name;
     this.description = description;
   }
-  setSubTasks(subtasks) {
-    this.subTasks = subtasks;
+  setSubTasks(subtask) {
+    if (this.subTasks.includes(subtask._id)) return;
+    this.subTasks = subtask;
     this.save();
   }
 }
