@@ -2,7 +2,7 @@ import { XCircleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outl
 import { useEffect, useState } from "react";
 import { createOrUpdate } from "controller/taskController";
 
-export default function AddTaskModal({ hide, columns }) {
+export default function UpdateTaskModal({ hide, columns, selectedTask }) {
   const [task, setTask] = useState();
   function handleSetTask(val) {
     setTask({ ...task, ...val });
@@ -12,42 +12,38 @@ export default function AddTaskModal({ hide, columns }) {
     await createOrUpdate(task);
     hide();
   }
+
+  function setDoneSubtask(subTaskId) {
+    const subTask = task.subTasks.find((t) => t._id == subTaskId);
+    subTask.done = !subTask.done;
+    setTask({ ...task });
+    console.log(task, { ...task });
+  }
+
   useEffect(() => {
-    setTask({
-      subTasks: [{ name: "" }],
-      columnId: columns[0]?._id,
-    });
-  }, []);
+    if (selectedTask._id) {
+      setTask({ columnId: columns[0]?._id, ...selectedTask });
+    }
+    console.log("useffecg");
+  }, [selectedTask]);
 
   return (
     <>
       <div className="modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 ">
         <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[500px]">
-          <div className="head mb-5">
-            <div className="icon border mb-4 w-12 h-12 grid place-items-center rounded-[10px] shadow">
-              <ClipboardDocumentListIcon className="w-6 h-6" />
-            </div>
-            <h2 className="text-lg font-semibold ">Create new task</h2>
+          <div className="head">
+            <input
+              type="text"
+              value={task?.name}
+              onInput={(e) => {
+                handleSetTask({ name: e.target.value });
+              }}
+              className="py-2.5  text-lg font-semibold  border-none rounded-lg border w-full focus-visible:outline-0"
+              placeholder="Enter task name"
+            />
           </div>
           <div className="modal-content">
             <div className="input-group pb-3">
-              <label className="text-sm pb-[6px] font-medium text-gray-700 block">
-                Title
-              </label>
-              <input
-                type="text"
-                value={task?.name}
-                onInput={(e) => {
-                  handleSetTask({ name: e.target.value });
-                }}
-                className="py-2.5  px-3.5 rounded-lg border w-full focus-visible:outline-0"
-                placeholder="Enter task name"
-              />
-            </div>
-            <div className="input-group pb-3">
-              <label className="text-sm pb-[6px] font-medium text-gray-700 block">
-                Description
-              </label>
               <textarea
                 type="text"
                 value={task?.description}
@@ -55,7 +51,7 @@ export default function AddTaskModal({ hide, columns }) {
                   handleSetTask({ description: e.target.value });
                 }}
                 rows="2"
-                className="py-2.5  px-3.5 rounded-lg border w-full focus-visible:outline-0"
+                className="py-2.5 text-slate-500 text-sm resize-none border-none rounded-lg border w-full focus-visible:outline-0"
                 placeholder="Enter task detail"
               ></textarea>
             </div>
@@ -66,44 +62,24 @@ export default function AddTaskModal({ hide, columns }) {
               <div className="max-h-40 overflow-y-auto">
                 {task?.subTasks?.map((subTask, i) => {
                   return (
-                    <div key={i} className="flex items-center gap-2 mb-2">
+                    <label
+                      key={i}
+                      className="flex items-center select-none cursor-pointer gap-2 mb-2 py-2  px-3 rounded bg-neutral-200"
+                    >
                       <input
-                        type="text"
-                        value={subTask?.name}
-                        onInput={(e) => {
-                          let tasksObj = task.subTasks;
-                          tasksObj[i] = { ...tasksObj[i], name: e.target.value };
-                          handleSetTask({
-                            subTasks: tasksObj,
-                          });
-                        }}
-                        className="w-full border  rounded-lg focus-visible:outline-0 py-2.5  px-3.5 "
-                        placeholder="Enter subtask name"
+                        type="checkbox"
+                        value={subTask?._id}
+                        checked={subTask.done}
+                        onChange={(e) => setDoneSubtask(subTask._id)}
+                        className="focus-visible:outline-0 border-none w-3.5 h-3.5 peer"
                       />
-                      {i != 0 && (
-                        <XCircleIcon
-                          onClick={() => {
-                            handleSetTask({
-                              subTasks: task?.subTasks?.filter((b, ind) => i != ind),
-                            });
-                          }}
-                          className="w-5 cursor-pointer  h-5"
-                        />
-                      )}
-                    </div>
+                      <span className="text-sm peer-checked:line-through">
+                        {subTask?.name}
+                      </span>
+                    </label>
                   );
                 })}
               </div>
-              <button
-                onClick={() => {
-                  handleSetTask({
-                    subTasks: [...(task?.subTasks ?? []), ""],
-                  });
-                }}
-                className="w-48 ml-auto block mt-2 border-2 border-[#7F56D9] text-white rounded-lg  bg-[#7F56D9] h-full py-2.5  px-3.5 "
-              >
-                Add new subtask
-              </button>
             </div>
 
             <div className="input-group mb-3">
@@ -129,7 +105,7 @@ export default function AddTaskModal({ hide, columns }) {
               </select>
             </div>
 
-            <div className="buttons flex mt-6 gap-4">
+            {/* <div className="buttons flex mt-6 gap-4">
               <button
                 onClick={hide}
                 className="flex-grow  py-2.5 px-5 shadow rounded-lg border  text-base"
@@ -142,7 +118,7 @@ export default function AddTaskModal({ hide, columns }) {
               >
                 Done
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div

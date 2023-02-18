@@ -2,17 +2,19 @@
 import Sidebar from "../components/Sidebar";
 import ContentHeader from "../components/ContentHeader";
 import AddTaskModal from "../components/modals/AddTaskModal";
+import UpdateTaskModal from "../components/modals/UpdateTaskModal";
 import { getById } from "../controller/taskController";
 import { useState } from "react";
 
 export default function Home() {
   const [columns, setColumns] = useState([]);
   const [createModalIsOpen, setCreateModalState] = useState(false);
+  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [selectedTask, setselectedTask] = useState({});
 
   async function getTaskDetail(taskId) {
     setselectedTask(await getById(taskId));
-    setCreateModalState(true);
+    setUpdateModalIsOpen(true);
   }
 
   let style = {
@@ -24,9 +26,12 @@ export default function Home() {
 
   return (
     <>
-      {!!createModalIsOpen && (
-        <AddTaskModal
-          hide={() => (setCreateModalState(false), setselectedTask({}))}
+      {createModalIsOpen && (
+        <AddTaskModal hide={() => setCreateModalState(false)} columns={columns} />
+      )}
+      {!!selectedTask && updateModalIsOpen && (
+        <UpdateTaskModal
+          hide={() => setUpdateModalIsOpen(false)}
           columns={columns}
           selectedTask={selectedTask}
         />

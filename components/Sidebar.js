@@ -56,7 +56,9 @@ export default function Sidebar({ setColumns }) {
                   <button
                     key={b._id}
                     onClick={() => getBoardColumns(b._id)}
-                    className={` select-none px-3 py-2  rounded-md  hover:bg-hover-gray-100  text-gray-700 flex  items-center`}
+                    className={`${
+                      activeBoard == b._id ? "bg-gray-100" : ""
+                    } select-none px-3 py-2  rounded-md  hover:bg-gray-100  text-gray-700 flex  items-center`}
                   >
                     {/* <TableCellsIcon className="w-6 h-6 text-gray-500 mr-3" /> */}
                     {b.name}
