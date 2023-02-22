@@ -8,10 +8,10 @@ export default function UpdateTaskModal({ hide, columns, selectedTask }) {
     setTask({ ...task, ...val });
   }
 
-  async function handleCreateOrUpdateTask() {
-    await createOrUpdate(task);
-    hide();
-  }
+  // async function handleCreateOrUpdateTask() {
+  //   await createOrUpdate(task);
+  //   hide();
+  // }
 
   function setDoneSubtask(subTaskId) {
     const subTask = task.subTasks.find((t) => t._id == subTaskId);

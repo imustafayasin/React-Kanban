@@ -8,6 +8,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [columns, setColumns] = useState([]);
+  const [activeBoard, setActiveBoard] = useState();
   const [createModalIsOpen, setCreateModalState] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [selectedTask, setselectedTask] = useState({});
@@ -38,9 +39,14 @@ export default function Home() {
       )}
 
       <div className="mx-auto flex flex-row h-full overflow-hidden w-full	relative">
-        <Sidebar setColumns={setColumns} />
+        <Sidebar setColumns={setColumns} setActiveBoard={setActiveBoard} />
         <main className="w-full">
-          <ContentHeader test="123" show={() => setCreateModalState(true)} />
+          {activeBoard && (
+            <ContentHeader
+              activeBoard={activeBoard}
+              show={() => setCreateModalState(true)}
+            />
+          )}
           <div
             style={style.content}
             className="content bg-gray-100	 px-10 p-8 flex gap-6 overflow-x-auto	"

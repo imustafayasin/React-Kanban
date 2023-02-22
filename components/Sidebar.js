@@ -5,20 +5,21 @@ import * as board from "controller/boardController";
 import * as column from "controller/columnController";
 import { useEffect, useState } from "react";
 
-export default function Sidebar({ setColumns }) {
+export default function Sidebar({ setColumns, setActiveBoard }) {
   const [createModalIsOpen, setCreateModalState] = useState(false);
   const [boards, setBoards] = useState([]);
-  const [activeBoard, setActiveBoard] = useState(0);
+  const [activeBoardId, setactiveBoardId] = useState(0);
 
   async function handleBoards() {
     setBoards((await board.findAll()).data);
   }
   async function getBoardColumns(id) {
-    if (activeBoard == id) return;
+    if (activeBoardId == id) return;
     setTimeout(async () => {
       setColumns(await column.findAll(id));
     });
-    setActiveBoard(id);
+    setactiveBoardId(id);
+    setActiveBoard(boards.find((b) => b._id == id));
   }
   useEffect(() => {
     handleBoards();
@@ -57,7 +58,7 @@ export default function Sidebar({ setColumns }) {
                     key={b._id}
                     onClick={() => getBoardColumns(b._id)}
                     className={`${
-                      activeBoard == b._id ? "bg-gray-100" : ""
+                      activeBoardId == b._id ? "bg-gray-100" : ""
                     } select-none px-3 py-2  rounded-md  hover:bg-gray-100  text-gray-700 flex  items-center`}
                   >
                     {/* <TableCellsIcon className="w-6 h-6 text-gray-500 mr-3" /> */}
