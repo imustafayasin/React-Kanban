@@ -17,14 +17,6 @@ export default function Home() {
     setselectedTask(await getById(taskId));
     setUpdateModalIsOpen(true);
   }
-
-  let style = {
-    content: {
-      height: "calc(100% - 85px)",
-      width: "calc(100vw - 312px)",
-    },
-  };
-
   return (
     <>
       {createModalIsOpen && (
@@ -47,10 +39,7 @@ export default function Home() {
               show={() => setCreateModalState(true)}
             />
           )}
-          <div
-            style={style.content}
-            className="content bg-gray-100	 px-10 p-8 flex gap-6 overflow-x-auto	"
-          >
+          <div className="content h-[100%] bg-gray-100	 px-10 p-8 flex gap-6 overflow-x-auto	">
             {columns.map((column, i) => {
               return (
                 <div key={i} className="board shrink-0	 h-full min-w-[330px]">

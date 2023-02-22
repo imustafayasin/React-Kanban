@@ -1,6 +1,7 @@
 import "lib/mongodb";
 import Boards from "../models/boardModel";
 import Columns from "../models/columnModel";
+import Tasks from "../models/taskModel";
 
 import { getUserWithJWT } from "./accountRepository";
 let findAllAsync = async function (usertoken) {
@@ -22,5 +23,12 @@ let create = async function (board) {
     }))
   );
 };
+let deleteBoard = async function ({ boardId }) {
+  await Boards.findByIdAndDelete(boardId);
+  let columns = await Columns.find({ boardId });
+  for (const column of columns) {
+    await Tasks.deleteMany({ columnId: column._id });
+  }
+};
 
-export { findAllAsync, create };
+export { findAllAsync, create, deleteBoard };
