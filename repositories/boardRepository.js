@@ -11,17 +11,14 @@ let findAllAsync = async function (usertoken) {
 
 let create = async function (board) {
   const user = await getUserWithJWT(board.userToken);
-  let createdBoard = await Boards.create({
-    userId: user._id,
-    name: board.name,
-  });
+  let createdBoard = new Boards({ userId: user._id, name: board.name });
 
-  await Columns.insertMany(
-    board.columns.map((columnName) => ({
-      boardId: createdBoard._id,
-      name: columnName,
-    }))
-  );
+  for (const columnName of board.columns) {
+    var column = new Columns({ boardId: createdBoard._id, name: columnName });
+    await createdBoard.addColumn(column);
+    await column.save();
+  }
+  await createdBoard.save();
 };
 let deleteBoard = async function ({ boardId }) {
   await Boards.findByIdAndDelete(boardId);
@@ -30,5 +27,8 @@ let deleteBoard = async function ({ boardId }) {
     await Tasks.deleteMany({ columnId: column._id });
   }
 };
+let getById = async function (boardId) {
+  return await Boards.findById(boardId);
+};
 
-export { findAllAsync, create, deleteBoard };
+export { findAllAsync, create, deleteBoard, getById };

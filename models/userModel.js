@@ -6,15 +6,18 @@ class User {
   }
 }
 
-var userSchema = new mongoose.Schema({
-  email: {
-    type: String,
+var userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+    },
+    emailConfirmed: {
+      type: Boolean,
+      default: false,
+    },
   },
-  emailConfirmed: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { timestamps: true }
+);
 
 userSchema.loadClass(User);
 

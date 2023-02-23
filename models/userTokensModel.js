@@ -6,12 +6,15 @@ class UserTokens {
   }
 }
 
-var userTokensSchema = new mongoose.Schema({
-  token: {
-    type: String,
-    unique: true,
+var userTokensSchema = new mongoose.Schema(
+  {
+    token: {
+      type: String,
+      unique: true,
+    },
   },
-});
+  { timestamps: true }
+);
 
 userTokensSchema.loadClass(UserTokens);
 

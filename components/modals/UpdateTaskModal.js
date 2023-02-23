@@ -17,14 +17,12 @@ export default function UpdateTaskModal({ hide, columns, selectedTask }) {
     const subTask = task.subTasks.find((t) => t._id == subTaskId);
     subTask.done = !subTask.done;
     setTask({ ...task });
-    console.log(task, { ...task });
   }
 
   useEffect(() => {
     if (selectedTask._id) {
       setTask({ columnId: columns[0]?._id, ...selectedTask });
     }
-    console.log("useffecg");
   }, [selectedTask]);
 
   return (

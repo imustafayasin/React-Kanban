@@ -14,22 +14,25 @@ class Task {
   }
 }
 
-var taskSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  columnId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Columns",
-  },
-  description: String,
-  subTasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SubTasks",
+var taskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
     },
-  ],
-});
+    columnId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Columns",
+    },
+    description: String,
+    subTasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubTasks",
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 taskSchema.loadClass(Task);
 

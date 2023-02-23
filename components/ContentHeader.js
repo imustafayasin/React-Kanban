@@ -5,12 +5,11 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState, useRef } from "react";
-import { deleteBoard } from "../controller/boardController";
+import { deleteBoard, getById } from "../controller/boardController";
 export default function ContentHeader({ show, activeBoard }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownMenuRef = useRef();
   function clickOutSide(e) {
-    console.log();
     !e.composedPath().includes(dropdownMenuRef.current) && setShowDropdown(false);
   }
   useEffect(() => {
@@ -34,7 +33,12 @@ export default function ContentHeader({ show, activeBoard }) {
 
           {showDropdown && (
             <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
-              <button className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left">
+              <button
+                onClick={async () => {
+                  await getById(activeBoard._id);
+                }}
+                className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
+              >
                 <PencilSquareIcon className="w-5 h-5 mr-2 text-gray-800" />
                 Update
               </button>

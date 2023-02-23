@@ -8,23 +8,26 @@ class SubTask {
   }
 }
 
-var subtaskSchema = new mongoose.Schema({
-  name: {
-    type: String,
+var subtaskSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+    },
+    taskId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tasks",
+    },
+    done: {
+      type: Boolean,
+      default: false,
+    },
+    columnId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Columns",
+    },
   },
-  taskId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Tasks",
-  },
-  done: {
-    type: Boolean,
-    default: false,
-  },
-  columnId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Columns",
-  },
-});
+  { timestamps: true }
+);
 
 subtaskSchema.loadClass(SubTask);
 

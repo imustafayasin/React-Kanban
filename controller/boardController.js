@@ -6,8 +6,11 @@ const create = async function ({ name, columns }) {
 const deleteBoard = async function (boardId) {
   return await request("/api/board/delete", "POST", { boardId });
 };
+const getById = async function (boardId) {
+  return await request(`/api/board/${boardId}`, "GET");
+};
 const findAll = async function () {
   return await request("/api/board/list", "GET");
 };
 
-export { create, findAll, deleteBoard };
+export { create, findAll, deleteBoard, getById };

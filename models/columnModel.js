@@ -13,21 +13,24 @@ class Column {
   }
 }
 
-var columnSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  boardId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Boards",
-  },
-  tasks: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Tasks",
+var columnSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
     },
-  ],
-});
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Boards",
+    },
+    tasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tasks",
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 columnSchema.loadClass(Column);
 
