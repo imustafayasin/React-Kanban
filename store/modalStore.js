@@ -4,12 +4,16 @@ const modalStore = createSlice({
   name: "CreateSlice",
   initialState: {
     showAddBoardModal: false,
+    showUpdateBoardModal: false,
     showAddTaskModal: false,
     showUpdateTaskModal: false,
   },
   reducers: {
     showAddBoardModal: (state, { payload }) => {
       state.showAddBoardModal = payload;
+    },
+    showUpdateBoardModal: (state, { payload }) => {
+      state.showUpdateBoardModal = payload;
     },
     showAddTaskModal: (state, { payload }) => {
       state.showAddTaskModal = payload;
@@ -20,6 +24,10 @@ const modalStore = createSlice({
   },
 });
 
-export const { showAddBoardModal, showAddTaskModal, showUpdateTaskModal } =
-  modalStore.actions;
+export const {
+  showAddBoardModal,
+  showAddTaskModal,
+  showUpdateBoardModal,
+  showUpdateTaskModal,
+} = modalStore.actions;
 export default modalStore.reducer;

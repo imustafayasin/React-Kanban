@@ -11,6 +11,16 @@ class Board {
     this.columns.push(column);
     await this.save();
   }
+  async removeColumn(column) {
+    if (!this.columns.includes(column._id)) return;
+    this.columns.splice(this.columns.indexOf(column), 1);
+    await this.save();
+  }
+  async update(name) {
+    if (this.name == name) return;
+    this.name = name ?? this.name;
+    await this.save();
+  }
 }
 
 var boardSchema = new mongoose.Schema(

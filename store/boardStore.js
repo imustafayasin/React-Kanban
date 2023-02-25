@@ -7,8 +7,12 @@ export const boardStore = createSlice({
     setBoards: (state, { payload }) => {
       state.values = payload;
     },
-    getById: (state, action) => {
-      return state.find((b) => b._id == action.payload._id);
+    addBoard: (state, { payload }) => {
+      state.values.push(payload);
+    },
+    deleteBoard: (state, { payload }) => {
+      var boardIndex = state.values.findIndex((b) => b._id == payload);
+      state.values.splice(boardIndex, 1);
     },
     setActive: (state, action) => {
       state.active = action.payload;
@@ -16,5 +20,5 @@ export const boardStore = createSlice({
   },
 });
 
-export const { setBoards, getById, setActive } = boardStore.actions;
+export const { setBoards, addBoard, setActive, deleteBoard } = boardStore.actions;
 export default boardStore.reducer;

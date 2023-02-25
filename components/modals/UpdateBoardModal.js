@@ -1,16 +1,21 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useRef, useState } from "react";
-import { create } from "controller/boardController";
-import { addBoard } from "../../store/boardStore";
-import { showAddBoardModal } from "../../store/modalStore";
+import { useEffect, useRef, useState } from "react";
+import { update } from "controller/boardController";
+import { showUpdateBoardModal } from "../../store/modalStore";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function AddBoardModal() {
+export default function UpdateBoardModal() {
   const [board, setBoard] = useState({});
   const dispatch = useDispatch();
 
-  const show = useSelector((state) => state.modal.showAddBoardModal);
+  const show = useSelector((state) => state.modal.showUpdateBoardModal);
+
+  const activeBoard = useSelector((state) => state.board.active);
+
+  useEffect(() => {
+    setBoard({ ...board, ...activeBoard });
+  }, [activeBoard]);
 
   const columnNameInputRef = useRef();
 
@@ -18,9 +23,9 @@ export default function AddBoardModal() {
     setBoard({ ...board, ...val });
   }
 
-  async function handleCreateBoard() {
-    dispatch(addBoard(await create(board)));
-    dispatch(showAddBoardModal(false));
+  async function handleUpdateBoard() {
+    await update(board);
+    dispatch(showUpdateBoardModal(false));
     setBoard({});
   }
 
@@ -35,7 +40,7 @@ export default function AddBoardModal() {
               </div>
               <h2 className="text-lg font-semibold mb-1">Create a new board</h2>
               <p className="text-sm text-zinc-500">
-                Create board and columns. You can change it later.
+                Update board and columns. You can change it later.
               </p>
             </div>
             <div className="modal-content">
@@ -111,25 +116,25 @@ export default function AddBoardModal() {
               </div>
               <div className="buttons flex mt-6 gap-4">
                 <button
-                  // onClick={(e) => {
-                  //   onHide(false);
-                  // }}
+                  onClick={(e) => {
+                    dispatch(showUpdateBoardModal(false));
+                  }}
                   className="flex-grow py-2.5 px-5 shadow rounded-lg border  text-base"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleCreateBoard}
+                  onClick={handleUpdateBoard}
                   className="flex-grow py-2.5 px-5 shadow rounded-lg border border-[#7F56D9] bg-[#7F56D9] text-white text-base"
                 >
-                  Done
+                  Update
                 </button>
               </div>
             </div>
           </div>
           <div
             onClick={(e) => {
-              dispatch(showAddBoardModal(false));
+              dispatch(showUpdateBoardModal(false));
             }}
             className={`${
               !show ? "invisible" : ""

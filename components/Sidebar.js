@@ -6,6 +6,7 @@ import * as board from "../controller/boardController";
 import * as column from "../controller/columnController";
 import { setBoards, setActive } from "../store/boardStore";
 import { setColumns } from "../store/columnStore";
+import { showAddBoardModal } from "../store/modalStore";
 
 export default function Sidebar({ showBoardModal }) {
   const boards = useSelector((state) => state.board.values);
@@ -58,7 +59,7 @@ export default function Sidebar({ showBoardModal }) {
           <div>
             <button
               onClick={() => {
-                showBoardModal();
+                dispatch(showAddBoardModal(true));
               }}
               className="px-4 mt-4 py-2 select-none flex w-full items-center rounded-lg border  shadow-sm"
             >

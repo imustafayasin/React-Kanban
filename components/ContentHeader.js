@@ -5,13 +5,15 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { deleteBoard, getById } from "../controller/boardController";
+import { useDispatch, useSelector } from "react-redux";
+import * as board from "../controller/boardController";
+import { deleteBoard, setActive } from "../store/boardStore";
+import { showUpdateBoardModal } from "../store/modalStore";
 export default function ContentHeader() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownMenuRef = useRef();
   const activeBoard = useSelector((state) => state.board.active);
-
+  const dispatch = useDispatch();
   function clickOutSide(e) {
     !e.composedPath().includes(dropdownMenuRef.current) && setShowDropdown(false);
   }
@@ -38,7 +40,9 @@ export default function ContentHeader() {
             <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
               <button
                 onClick={async () => {
-                  showUpdateBoardModal(await getById(activeBoard._id));
+                  dispatch(showUpdateBoardModal(true));
+                  const result = await board.getById(activeBoard._id);
+                  dispatch(setActive(result));
                 }}
                 className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
               >
@@ -47,7 +51,8 @@ export default function ContentHeader() {
               </button>
               <button
                 onClick={() => {
-                  deleteBoard(activeBoard._id);
+                  board.deleteBoard(activeBoard._id);
+                  dispatch(deleteBoard(activeBoard._id));
                 }}
                 className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
               >
