@@ -1,11 +1,19 @@
 import { XCircleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { createOrUpdate } from "controller/taskController";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showUpdateTaskModal } from "../../store/modalStore";
+import { setDoneSubtask } from "../../store/taskStore";
 export default function UpdateTaskModal() {
-  const showUpdateTaskModal = useSelector((state) => state.modal.showUpdateTaskModal);
-
   const [task, setTask] = useState();
+
+  const dispatch = useDispatch();
+
+  const show = useSelector((state) => state.modal.showUpdateTaskModal);
+
+  const activeTask = useSelector((state) => state.task.active);
+  const columns = useSelector((state) => state.column.values) ?? [];
+
   function handleSetTask(val) {
     setTask({ ...task, ...val });
   }
@@ -15,21 +23,19 @@ export default function UpdateTaskModal() {
   //   hide();
   // }
 
-  function setDoneSubtask(subTaskId) {
-    const subTask = task.subTasks.find((t) => t._id == subTaskId);
-    subTask.done = !subTask.done;
-    setTask({ ...task });
-  }
+  useEffect(() => {
+    setTask(activeTask);
+  }, [activeTask]);
 
-  // useEffect(() => {
-  //   if (selectedTask._id) {
-  //     setTask({ columnId: columns[0]?._id, ...selectedTask });
-  //   }
-  // }, [selectedTask]);
+  function doneSubtask(subTaskId) {
+    const subTask = task.subTasks.slice().find((t) => t._id == subTaskId);
+    console.log(subTask);
+    dispatch(setDoneSubtask({ _id: subTaskId, done: !subTask.done }));
+  }
 
   return (
     <>
-      {showUpdateTaskModal && (
+      {show && (
         <div className="modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 ">
           <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[500px]">
             <div className="head">
@@ -71,7 +77,7 @@ export default function UpdateTaskModal() {
                           type="checkbox"
                           value={subTask?._id}
                           checked={subTask.done}
-                          onChange={(e) => setDoneSubtask(subTask._id)}
+                          onChange={(e) => doneSubtask(subTask._id)}
                           className="focus-visible:outline-0 border-none w-3.5 h-3.5 peer"
                         />
                         <span className="text-sm peer-checked:line-through">
@@ -123,7 +129,9 @@ export default function UpdateTaskModal() {
             </div>
           </div>
           <div
-            onClick={hide}
+            onClick={() => {
+              dispatch(showUpdateTaskModal(false));
+            }}
             className=" z-10  backdrop-blur-[1px]  absolute h-full bg-black/25 w-full"
           ></div>
         </div>

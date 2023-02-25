@@ -12,10 +12,7 @@ import { store } from "../store/index";
 import { Provider } from "react-redux";
 
 export default function Home() {
-  // async function getTaskDetail(taskId) {
-  //   setselectedTask(await getById(taskId));
-  //   setUpdateModalIsOpen(true);
-  // }
+
 
   return (
     <Provider store={store}>

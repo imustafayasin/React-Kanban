@@ -1,7 +1,16 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showUpdateTaskModal } from "../store/modalStore";
+import { setActive } from "../store/taskStore";
+import { getById } from "../controller/taskController";
 
 export default function Columns() {
+  const dispatch = useDispatch();
   const columns = useSelector((state) => state.column.values) ?? [];
+
+  async function getTaskDetail(taskId) {
+    dispatch(setActive(await getById(taskId)));
+    dispatch(showUpdateTaskModal(true));
+  }
   return (
     <div className="content h-[100%] bg-gray-100	 px-10 p-8 flex gap-6 overflow-x-auto	">
       {columns.map((column, i) => {

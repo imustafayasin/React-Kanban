@@ -3,6 +3,7 @@ import boardStore from "./boardStore";
 import userStore from "./userStore";
 import columnStore from "./columnStore";
 import modalStore from "./modalStore";
+import taskStore from "./taskStore";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     user: userStore,
     column: columnStore,
     modal: modalStore,
+    task: taskStore,
   },
 });
