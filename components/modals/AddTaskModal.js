@@ -1,20 +1,23 @@
 import { XCircleIcon, ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { createOrUpdate } from "controller/taskController";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { showAddTaskModal } from "../../store/modalStore";
 
 export default function AddTaskModal() {
   const [task, setTask] = useState();
-  const showAddTaskModal = useSelector((state) => state.modal.showAddTaskModal);
+  const dispatch = useDispatch();
 
+  const show = useSelector((state) => state.modal.showAddTaskModal);
   const columns = useSelector((state) => state.column.values);
+
   function handleSetTask(val) {
     setTask({ ...task, ...val });
   }
 
   async function handleCreateOrUpdateTask() {
     await createOrUpdate(task);
-    hide();
+    dispatch(showAddTaskModal(false));
   }
   useEffect(() => {
     setTask({
@@ -25,7 +28,7 @@ export default function AddTaskModal() {
 
   return (
     <>
-      {showAddTaskModal && (
+      {show && (
         <div className="modal  z-20 w-full grid items-center justify-center	 absolute -translate-y-1/2	-translate-x-1/2	 h-full left-1/2 	top-1/2 p-4 ">
           <div className="modal-content z-20	 relative rounded-md p-6  bg-white w-[500px]">
             <div className="head mb-5">
@@ -136,7 +139,7 @@ export default function AddTaskModal() {
 
               <div className="buttons flex mt-6 gap-4">
                 <button
-                  // onClick={}
+                  onClick={() => dispatch(showAddTaskModal(false))}
                   className="flex-grow  py-2.5 px-5 shadow rounded-lg border  text-base"
                 >
                   Cancel
@@ -151,7 +154,7 @@ export default function AddTaskModal() {
             </div>
           </div>
           <div
-            // onClick={hide}
+            onClick={() => dispatch(showAddTaskModal(false))}
             className=" z-10  backdrop-blur-[1px]  absolute h-full bg-black/25 w-full"
           ></div>
         </div>

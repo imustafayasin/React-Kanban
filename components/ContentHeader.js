@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as board from "../controller/boardController";
 import { deleteBoard, setActive } from "../store/boardStore";
-import { showUpdateBoardModal } from "../store/modalStore";
+import { showUpdateBoardModal, showAddTaskModal } from "../store/modalStore";
 export default function ContentHeader() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownMenuRef = useRef();
@@ -27,8 +27,11 @@ export default function ContentHeader() {
     <div className="flex justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
       <h3 className="text-xl"> {activeBoard?.name}</h3>
       <div className="flex items-center">
-        <button className="rounded py-2.5 px-4 text- border" onClick={() => show()}>
-          Add New Task {!!showDropdown}
+        <button
+          className="rounded py-2.5 px-4 text- border"
+          onClick={() => dispatch(showAddTaskModal(true))}
+        >
+          Add New Task
         </button>
         <div className="dropdown" ref={dropdownMenuRef}>
           <EllipsisVerticalIcon
