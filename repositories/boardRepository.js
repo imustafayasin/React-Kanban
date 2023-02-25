@@ -13,8 +13,8 @@ let create = async function (board) {
   const user = await getUserWithJWT(board.userToken);
   let createdBoard = new Boards({ userId: user._id, name: board.name });
 
-  for (const columnName of board.columns) {
-    var column = new Columns({ boardId: createdBoard._id, name: columnName });
+  for (const columnObj of board.columns) {
+    var column = new Columns({ boardId: createdBoard._id, name: columnObj.name });
     await createdBoard.addColumn(column);
     await column.save();
   }
@@ -28,7 +28,7 @@ let deleteBoard = async function ({ boardId }) {
   }
 };
 let getById = async function (boardId) {
-  return await Boards.findById(boardId);
+  return await Boards.findById(boardId).populate("columns");
 };
 
 export { findAllAsync, create, deleteBoard, getById };

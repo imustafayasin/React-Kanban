@@ -1,40 +1,26 @@
 "use client";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
-import AddBoardModal from "./modals/AddBoardModal";
-import * as board from "controller/boardController";
-import * as column from "controller/columnController";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as board from "../controller/boardController";
+import * as column from "../controller/columnController";
+import { setBoards, setActive } from "../store/boardStore";
+import { setColumns } from "../store/columnStore";
 
-export default function Sidebar({ setColumns, setActiveBoard }) {
-  const [createModalIsOpen, setCreateModalState] = useState(false);
-  const [boards, setBoards] = useState([]);
-  const [activeBoardId, setactiveBoardId] = useState(0);
-
-  async function handleBoards() {
-    setBoards((await board.findAll()).data);
-  }
-  async function getBoardColumns(id) {
-    if (activeBoardId == id) return;
-    setTimeout(async () => {
-      setColumns(await column.findAll(id));
-    });
-    setactiveBoardId(id);
-    setActiveBoard(boards.find((b) => b._id == id));
-  }
+export default function Sidebar({ showBoardModal }) {
+  const boards = useSelector((state) => state.board.values);
+  const dispatch = useDispatch();
   useEffect(() => {
-    handleBoards();
+    (async () => {
+      dispatch(setBoards(await board.findAll()));
+    })();
   }, []);
 
+  async function getBoardColumns(boardId) {
+    dispatch(setColumns(await column.findAll(boardId)));
+  }
   return (
     <>
-      {createModalIsOpen && (
-        <AddBoardModal
-          show={createModalIsOpen}
-          dispatchGet={handleBoards}
-          onHide={setCreateModalState}
-        />
-      )}
-
       <aside className="min-w-[312px] p-8 border-r-gray-200 border-r h-full">
         <div className="pb-10 text-center text-3xl">
           Kanba<sup>n</sup>
@@ -56,10 +42,11 @@ export default function Sidebar({ setColumns, setActiveBoard }) {
                 return (
                   <button
                     key={b._id}
-                    onClick={() => getBoardColumns(b._id)}
-                    className={`${
-                      activeBoardId == b._id ? "bg-gray-100" : ""
-                    } select-none px-3 py-2  rounded-md  hover:bg-gray-100  text-gray-700 flex  items-center`}
+                    onClick={() => {
+                      getBoardColumns(b._id);
+                      dispatch(setActive(b));
+                    }}
+                    className={`select-none px-3 py-2  rounded-md  hover:bg-gray-100  text-gray-700 flex  items-center`}
                   >
                     {/* <TableCellsIcon className="w-6 h-6 text-gray-500 mr-3" /> */}
                     {b.name}
@@ -71,7 +58,7 @@ export default function Sidebar({ setColumns, setActiveBoard }) {
           <div>
             <button
               onClick={() => {
-                setCreateModalState(true);
+                showBoardModal();
               }}
               className="px-4 mt-4 py-2 select-none flex w-full items-center rounded-lg border  shadow-sm"
             >

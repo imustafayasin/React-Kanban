@@ -5,10 +5,13 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { deleteBoard, getById } from "../controller/boardController";
-export default function ContentHeader({ show, activeBoard }) {
+export default function ContentHeader() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownMenuRef = useRef();
+  const activeBoard = useSelector((state) => state.board.active);
+
   function clickOutSide(e) {
     !e.composedPath().includes(dropdownMenuRef.current) && setShowDropdown(false);
   }
@@ -20,7 +23,7 @@ export default function ContentHeader({ show, activeBoard }) {
   }, [showDropdown]);
   return (
     <div className="flex justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
-      <h3 className="text-xl"> {activeBoard.name}</h3>
+      <h3 className="text-xl"> {activeBoard?.name}</h3>
       <div className="flex items-center">
         <button className="rounded py-2.5 px-4 text- border" onClick={() => show()}>
           Add New Task {!!showDropdown}
@@ -35,7 +38,7 @@ export default function ContentHeader({ show, activeBoard }) {
             <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
               <button
                 onClick={async () => {
-                  await getById(activeBoard._id);
+                  showUpdateBoardModal(await getById(activeBoard._id));
                 }}
                 className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
               >
