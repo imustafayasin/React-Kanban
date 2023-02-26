@@ -13,7 +13,10 @@ export default function Columns() {
     dispatch(showUpdateTaskModal(true));
   }
   return (
-    <div className="content h-[100%] bg-gray-100	 px-10 p-8 flex gap-6 overflow-x-auto	">
+    <div
+      style={{ height: "calc(100% - 80px)" }}
+      className="content bg-gray-100 px-10 p-8 flex gap-6 overflow-x-auto	"
+    >
       {columns.map((column, i) => {
         return (
           <div key={i} className="board shrink-0	 h-full min-w-[330px]">

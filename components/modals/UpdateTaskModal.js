@@ -16,6 +16,7 @@ export default function UpdateTaskModal() {
   }
   async function handleUpdateTask() {
     await updateTask(task);
+    dispatch(showUpdateTaskModal(false));
   }
   useEffect(() => {
     setTask({ ...activeTask });

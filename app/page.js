@@ -13,7 +13,7 @@ export default function Home() {
       <Modals />
       <div className="mx-auto flex flex-row h-full overflow-hidden w-full	relative">
         <Sidebar />
-        <main className="w-full">
+        <main style={{ width: "calc(100% - 312px)" }} className="w-full">
           <ContentHeader />
           <Columns />
         </main>

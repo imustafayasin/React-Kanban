@@ -26,7 +26,7 @@ export default function ContentHeader() {
   return (
     <>
       {!!activeBoard["_id"] && (
-        <div className="flex justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
+        <div className="flex h-20 justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
           <h3 className="text-xl"> {activeBoard?.name}</h3>
           <div className="flex items-center">
             <button
