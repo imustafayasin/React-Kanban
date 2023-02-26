@@ -7,9 +7,19 @@ class Column {
     this.name = name;
   }
   async addTask(task) {
-    if (this.tasks.includes(task._id)) return;
     this.tasks.push(task);
     await this.save();
+  }
+  async removeTask(task) {
+    this.tasks.splice(
+      this.tasks.findIndex((t) => t.toString() == task._id.toString()),
+      1
+    );
+    await this.save();
+    return {
+      task,
+      t: this.tasks,
+    };
   }
 }
 

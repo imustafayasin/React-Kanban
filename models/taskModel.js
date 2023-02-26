@@ -7,10 +7,27 @@ class Task {
     this.name = name;
     this.description = description;
   }
-  setSubTasks(subtask) {
-    if (this.subTasks.includes(subtask._id)) return;
+  async setSubTasks(subtask) {
     this.subTasks = subtask;
+    await this.save();
+  }
+  async addSubTask(subtask) {
+    if (this.subTasks.includes(subtask._id)) return;
+    this.subTasks.push(subtask);
+    await this.save();
+  }
+  async updateColumn(columnId) {
+    if (!columnId) return;
+    this.columnId = columnId;
     this.save();
+  }
+  async removeSubtask(subtask) {
+    if (!this.subTasks.includes(subtask._id)) return;
+    this.subTasks.splice(
+      this.subTasks.findIndex((t) => t == subtask._id),
+      1
+    );
+    await this.save();
   }
 }
 

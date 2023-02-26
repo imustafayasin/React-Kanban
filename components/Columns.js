@@ -8,7 +8,8 @@ export default function Columns() {
   const columns = useSelector((state) => state.column.values) ?? [];
 
   async function getTaskDetail(taskId) {
-    dispatch(setActive(await getById(taskId)));
+    const task = await getById(taskId);
+    dispatch(setActive(task));
     dispatch(showUpdateTaskModal(true));
   }
   return (

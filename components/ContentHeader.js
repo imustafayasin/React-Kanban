@@ -24,48 +24,52 @@ export default function ContentHeader() {
     };
   }, [showDropdown]);
   return (
-    <div className="flex justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
-      <h3 className="text-xl"> {activeBoard?.name}</h3>
-      <div className="flex items-center">
-        <button
-          className="rounded py-2.5 px-4 text- border"
-          onClick={() => dispatch(showAddTaskModal(true))}
-        >
-          Add New Task
-        </button>
-        <div className="dropdown" ref={dropdownMenuRef}>
-          <EllipsisVerticalIcon
-            onClick={() => setShowDropdown(true)}
-            className=" w-10 h-7 ml-3 cursor-pointer"
-          />
+    <>
+      {!!activeBoard["_id"] && (
+        <div className="flex justify-between px-10 border-b border-gray-200   bg-gray-100 py-5 items-center">
+          <h3 className="text-xl"> {activeBoard?.name}</h3>
+          <div className="flex items-center">
+            <button
+              className="rounded py-2.5 px-4 text- border"
+              onClick={() => dispatch(showAddTaskModal(true))}
+            >
+              Add New Task
+            </button>
+            <div className="dropdown" ref={dropdownMenuRef}>
+              <EllipsisVerticalIcon
+                onClick={() => setShowDropdown(true)}
+                className=" w-10 h-7 ml-3 cursor-pointer"
+              />
 
-          {showDropdown && (
-            <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
-              <button
-                onClick={async () => {
-                  dispatch(showUpdateBoardModal(true));
-                  const result = await board.getById(activeBoard._id);
-                  dispatch(setActive(result));
-                }}
-                className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
-              >
-                <PencilSquareIcon className="w-5 h-5 mr-2 text-gray-800" />
-                Update
-              </button>
-              <button
-                onClick={() => {
-                  board.deleteBoard(activeBoard._id);
-                  dispatch(deleteBoard(activeBoard._id));
-                }}
-                className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
-              >
-                <TrashIcon className="w-5 h-6 mr-2 text-gray-800" />
-                Delete
-              </button>
+              {showDropdown && (
+                <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
+                  <button
+                    onClick={async () => {
+                      dispatch(showUpdateBoardModal(true));
+                      const result = await board.getById(activeBoard._id);
+                      dispatch(setActive(result));
+                    }}
+                    className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
+                  >
+                    <PencilSquareIcon className="w-5 h-5 mr-2 text-gray-800" />
+                    Update
+                  </button>
+                  <button
+                    onClick={() => {
+                      board.deleteBoard(activeBoard._id);
+                      dispatch(deleteBoard(activeBoard._id));
+                    }}
+                    className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
+                  >
+                    <TrashIcon className="w-5 h-6 mr-2 text-gray-800" />
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
