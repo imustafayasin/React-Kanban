@@ -4,23 +4,27 @@ import { update as updateTask } from "controller/taskController";
 import { useDispatch, useSelector } from "react-redux";
 import { showUpdateTaskModal } from "../../store/modalStore";
 import { setDoneSubtask, update } from "../../store/taskStore";
+import { updateTaskColumn } from "../../store/columnStore";
 export default function UpdateTaskModal() {
   const dispatch = useDispatch();
-  const [task, setTask] = useState({});
-  const activeTask = useSelector((state) => state.task.active);
+  const task = useSelector((state) => state.task.active);
   const columns = useSelector((state) => state.column.values) ?? [];
 
   async function handleSetTask(val) {
-    setTask({ ...task, ...val });
     dispatch(update(val));
+    dispatch(
+      updateTaskColumn({
+        oldColumnId: task.columnId,
+        newColumnId: val.columnId ?? task.columnId,
+        task: task,
+      })
+    );
   }
   async function handleUpdateTask() {
     await updateTask(task);
+
     dispatch(showUpdateTaskModal(false));
   }
-  useEffect(() => {
-    setTask({ ...activeTask });
-  }, [activeTask]);
 
   function doneSubtask(subTaskId) {
     const subTask = task.subTasks.find((t) => t._id == subTaskId);
