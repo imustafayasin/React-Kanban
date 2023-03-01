@@ -35,7 +35,10 @@ export default function Columns() {
                     className="board-item bg-white cursor-pointer shadow mb-3 rounded-lg	 py-5 px-4"
                   >
                     <h2 className="mb-2 text-medium font-semibold">{task.name}</h2>
-                    <p className="text-xs text-gray-600">0 of 1 subtasks</p>
+                    <p className="text-xs text-gray-600">
+                      {task.subTasks.filter((t) => t.done == true).length} of{" "}
+                      {task.subTasks.length} subtasks
+                    </p>
                   </div>
                 );
               })}
