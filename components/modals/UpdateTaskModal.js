@@ -6,7 +6,10 @@ import {
   EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import { update as updateTask } from "controller/taskController";
+import {
+  update as updateTask,
+  deleteById as deleteTask,
+} from "controller/taskController";
 import { useDispatch, useSelector } from "react-redux";
 import { showUpdateTaskModal } from "../../store/modalStore";
 import { setDoneSubtask, update } from "../../store/taskStore";
@@ -81,7 +84,7 @@ export default function UpdateTaskModal() {
             {showDropdown && (
               <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
                 <button
-                  onClick={async () => {
+                  onClick={() => {
                     setUpdateMod(true);
                   }}
                   className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
@@ -90,7 +93,10 @@ export default function UpdateTaskModal() {
                   Update
                 </button>
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    deleteTask(task._id);
+                    dispatch(showUpdateTaskModal(false));
+                  }}
                   className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"
                 >
                   <TrashIcon className="w-5 h-6 mr-2 text-gray-800" />

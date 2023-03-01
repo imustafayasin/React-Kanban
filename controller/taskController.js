@@ -22,5 +22,8 @@ const update = async function ({ _id, name, subTasks, columnId, description }) {
 const getById = async function (taskId) {
   return await request("/api/task/get", "POST", { taskId });
 };
+const deleteById = async function (taskId) {
+  return await request("/api/task/delete", "POST", { taskId });
+};
 
-export { create, update, getById };
+export { create, update, getById, deleteById };

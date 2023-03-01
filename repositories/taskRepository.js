@@ -65,5 +65,10 @@ let update = async function ({ _id, name, columnId, subTasks, description }) {
 let getById = async function ({ taskId }) {
   return await Tasks.findById(taskId).populate("subTasks");
 };
+let deletById = async function ({ taskId }) {
+  await Tasks.findByIdAndDelete(taskId);
+  await SubTask.deleteMany({ taskId: new ObjectId(taskId) });
+  return { success: true };
+};
 
-export { create, getById, update };
+export { create, getById, update, deletById };
