@@ -21,10 +21,11 @@ export default function UpdateTaskModal() {
   const columns = useSelector((state) => state.column.values) ?? [];
   const [showUpdateMode, setUpdateMod] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownMenuRef = useRef();
+  const updateDropdownMenuRef = useRef();
 
   function clickOutSide(e) {
-    !e.composedPath().includes(dropdownMenuRef.current) && setShowDropdown(false);
+    console.log("clicked outside", e.composedPath());
+    !e.composedPath().includes(updateDropdownMenuRef.current) && setShowDropdown(false);
   }
   useEffect(() => {
     document.addEventListener("click", clickOutSide);
@@ -70,7 +71,6 @@ export default function UpdateTaskModal() {
             <input
               type="text"
               value={task?.name}
-              disabled={!showUpdateMode}
               onInput={(e) => {
                 handleSetTask({ name: e.target.value });
               }}
@@ -82,7 +82,10 @@ export default function UpdateTaskModal() {
               className="w-8 h-8 cursor-pointer"
             />
             {showDropdown && (
-              <div className="dropdown-inner shadow pt-2  w-40 bg-white absolute rounded  right-9">
+              <div
+                ref={updateDropdownMenuRef}
+                className="dropdown-inner shadow pt-2 z-50  w-40 bg-white absolute rounded  right-9"
+              >
                 <button
                   onClick={() => {
                     setUpdateMod(true);
@@ -110,7 +113,6 @@ export default function UpdateTaskModal() {
               <textarea
                 type="text"
                 value={task?.description}
-                disabled={!showUpdateMode}
                 onInput={(e) => {
                   handleSetTask({ description: e.target.value });
                 }}
