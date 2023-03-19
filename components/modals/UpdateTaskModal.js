@@ -13,7 +13,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { showUpdateTaskModal } from "../../store/modalStore";
 import { setDoneSubtask, update } from "../../store/taskStore";
-import { updateTaskColumn } from "../../store/columnStore";
+import {
+  updateTaskColumn,
+  deleteTask as deleteTaskFromStore,
+} from "../../store/columnStore";
 export default function UpdateTaskModal() {
   const dispatch = useDispatch();
 
@@ -97,6 +100,12 @@ export default function UpdateTaskModal() {
                 <button
                   onClick={() => {
                     deleteTask(task._id);
+                    dispatch(
+                      deleteTaskFromStore({
+                        column_id: task.columnId,
+                        task_id: task._id,
+                      })
+                    );
                     dispatch(showUpdateTaskModal(false));
                   }}
                   className=" mb-2 py-1 px-4  flex items-center hover:bg-slate-200 w-full text-left"

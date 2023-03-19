@@ -10,6 +10,13 @@ export const columnStore = createSlice({
     getById: (state, action) => {
       return state.find((b) => b._id == action.payload._id);
     },
+    deleteTask: (state, { payload }) => {
+      const column = state.values.find((t) => t._id == payload.column_id);
+      column.tasks.splice(
+        column.tasks.findIndex((t) => t._id == payload.task_id),
+        1
+      );
+    },
     updateTaskColumn(state, { payload }) {
       const oldColumn = state.values.find((t) => t._id == payload.oldColumnId);
       const newColumn = state.values.find((t) => t._id == payload.newColumnId);
@@ -22,5 +29,5 @@ export const columnStore = createSlice({
   },
 });
 
-export const { setColumns, getById, updateTaskColumn } = columnStore.actions;
+export const { setColumns, getById, updateTaskColumn, deleteTask } = columnStore.actions;
 export default columnStore.reducer;
