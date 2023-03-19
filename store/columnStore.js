@@ -10,6 +10,19 @@ export const columnStore = createSlice({
     getById: (state, action) => {
       return state.find((b) => b._id == action.payload._id);
     },
+    addTask: (state, { payload }) => {
+      console.log(state);
+      const column = state.values.find((t) => t._id == payload.columnId);
+      console.log({ payload }, state.values, { column });
+      console.log(column);
+      column.tasks.push({
+        _id: payload._id,
+        columnId: payload.columnId,
+        name: payload.name,
+        description: payload.description,
+        subTasks: payload.subTasks,
+      });
+    },
     deleteTask: (state, { payload }) => {
       const column = state.values.find((t) => t._id == payload.column_id);
       column.tasks.splice(
@@ -29,5 +42,6 @@ export const columnStore = createSlice({
   },
 });
 
-export const { setColumns, getById, updateTaskColumn, deleteTask } = columnStore.actions;
+export const { setColumns, getById, updateTaskColumn, deleteTask, addTask } =
+  columnStore.actions;
 export default columnStore.reducer;

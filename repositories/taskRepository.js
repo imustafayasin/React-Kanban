@@ -20,7 +20,7 @@ let create = async function ({ name, columnId, subTasks, description }) {
   }
 
   task.setSubTasks(createdSubTasksList);
-  return { success: true };
+  return task;
 };
 
 let update = async function ({ _id, name, columnId, subTasks, description }) {

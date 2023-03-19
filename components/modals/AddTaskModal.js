@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { create } from "controller/taskController";
 import { useDispatch, useSelector } from "react-redux";
 import { showAddTaskModal } from "../../store/modalStore";
+import { addTask } from "../../store/columnStore";
 
 export default function AddTaskModal() {
   const [task, setTask] = useState();
@@ -15,7 +16,7 @@ export default function AddTaskModal() {
   }
 
   async function handleCreateOrUpdateTask() {
-    await create(task);
+    dispatch(addTask(await create(task)));
     dispatch(showAddTaskModal(false));
   }
   useEffect(() => {
