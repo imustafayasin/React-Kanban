@@ -24,7 +24,6 @@ export default function UpdateTaskModal() {
   const updateDropdownMenuRef = useRef();
 
   function clickOutSide(e) {
-    console.log("clicked outside", e.composedPath());
     !e.composedPath().includes(updateDropdownMenuRef.current) && setShowDropdown(false);
   }
   useEffect(() => {

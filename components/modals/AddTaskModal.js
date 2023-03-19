@@ -86,7 +86,7 @@ export default function AddTaskModal() {
                         className="w-full border  rounded-lg focus-visible:outline-0 py-2.5  px-3.5 "
                         placeholder="Enter subtask name"
                       />
-                      {i != 0 && (
+                      {task.subTasks.length > 1 && (
                         <XCircleIcon
                           onClick={() => {
                             handleSetTask({
@@ -103,7 +103,7 @@ export default function AddTaskModal() {
               <button
                 onClick={() => {
                   handleSetTask({
-                    subTasks: [...(task?.subTasks ?? []), ""],
+                    subTasks: [...task?.subTasks, { name: task.subTask }],
                   });
                 }}
                 className="w-48 ml-auto block mt-2 border-2 border-[#7F56D9] text-white rounded-lg  bg-[#7F56D9] h-full py-2.5  px-3.5 "

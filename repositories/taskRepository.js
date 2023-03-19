@@ -13,6 +13,7 @@ let create = async function ({ name, columnId, subTasks, description }) {
 
   const createdSubTasksList = [];
   for (const subTask of subTasks) {
+    if (!subTask.name) continue;
     createdSubTasksList.push(
       await SubTask.create({ taskId: task._id, name: subTask.name, columnId: column._id })
     );
@@ -52,7 +53,7 @@ let update = async function ({ _id, name, columnId, subTasks, description }) {
 
   //update current Subtask
   for (const subTask of subTasks) {
-    if (!subTask._id) return;
+    if (!subTask._id || !subTask.name) return;
     await SubTask.findOneAndUpdate(
       { _id: new ObjectId(subTask._id) },
       { name: subTask.name, done: subTask?.done }
