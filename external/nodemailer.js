@@ -12,7 +12,7 @@ export default async function sendEmail(to, subject, html) {
     });
     let mailResult = await transporter.sendMail({
       from: process.env.NODEMAILER_SENDER_EMAIL,
-      to: process.env.NODEMAILER_TEST_RECEIVER_EMAIL,
+      to: to,
       subject: subject,
       html: html,
     });
