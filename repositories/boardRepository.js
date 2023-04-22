@@ -14,10 +14,12 @@ let create = async function (board) {
   const user = await getUserWithJWT(board.userToken);
   const createdBoard = new Boards({ userId: user._id, name: board.name });
 
-  for (const columnObj of board.columns) {
-    var column = new Columns({ boardId: createdBoard._id, name: columnObj.name });
-    await createdBoard.addColumn(column);
-    await column.save();
+  if (!!board.columns && board.columns.length > 0) {
+    for (const columnObj of board.columns) {
+      var column = new Columns({ boardId: createdBoard._id, name: columnObj.name });
+      await createdBoard.addColumn(column);
+      await column.save();
+    }
   }
   await createdBoard.save();
   return createdBoard;
